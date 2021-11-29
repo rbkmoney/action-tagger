@@ -252,7 +252,7 @@ function action() {
             }
             // check if commits and issues point to a diffent release
             core.info('commits in branch');
-            const msgLevel = yield checkMessages(octokit, branchInfo.object.sha, latestMainTag.commit.sha, issLabs);
+            const msgLevel = yield checkMessages(octokit, branchInfo.object.sha, latestMainTag === null || latestMainTag === void 0 ? void 0 : latestMainTag.commit.sha, issLabs);
             // core.info(`commit messages suggest ${msgLevel} upgrade`);
             if (isReleaseBranch(branchName, releaseBranch)) {
                 core.info(`${branchName} is a release branch`);

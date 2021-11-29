@@ -43,7 +43,7 @@ async function checkTag(
 async function getLatestTag(
   octokit: Octokit & Api & {paginate: PaginateInterface},
   boolAll = true
-): Promise<TagSchema> {
+): Promise<TagSchema | undefined> {
   const {data} = await octokit.rest.repos.listTags({
     owner,
     repo
@@ -67,7 +67,7 @@ async function getLatestTag(
   const filtered = allVTags.filter(b => semver.prerelease(b.name) === null)
   const result = filtered.pop()
 
-  return result!!
+  return result
 }
 
 async function loadBranch(
@@ -87,7 +87,7 @@ async function loadBranch(
 async function checkMessages(
   octokit: Octokit & Api & {paginate: PaginateInterface},
   branchHeadSha: string,
-  tagSha: string,
+  tagSha: string | undefined,
   issueTags: string[]
 ): Promise<string> {
   const sha = branchHeadSha
@@ -312,7 +312,7 @@ async function action(): Promise<void> {
     const msgLevel = await checkMessages(
       octokit,
       branchInfo.object.sha,
-      latestMainTag.commit.sha,
+      latestMainTag?.commit.sha,
       issLabs
     )
     // core.info(`commit messages suggest ${msgLevel} upgrade`);
